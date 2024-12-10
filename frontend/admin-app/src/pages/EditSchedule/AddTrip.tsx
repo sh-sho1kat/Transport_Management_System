@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import DatePickerOne from '../../components/Forms/DatePicker/DatePickerOne';
+import DatePickerOne from '../../components/Forms/DatePicker/DatePickerThree';
 import { LocationService, LocationEntry } from '../../services/LocationService';
 import { TimeService, TimeEntry } from '../../services/TimeService';
+import { TripService } from '../../services/TripService';
+import { SeatBookService } from '../../services/SeatBookService';
 
 const AddTrip: React.FC = () => {
   // Form state
   const [busId, setBusId] = useState('');
+  const [tripId, setTripId] = useState('');
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [date, setDate] = useState<Date | null>(null);
@@ -16,6 +19,19 @@ const AddTrip: React.FC = () => {
   const [times, setTimes] = useState<TimeEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  // Generate random tripId when component mounts
+  useEffect(() => {
+    generateTripId();
+  }, []);
+
+  const generateTripId = () => {
+    const prefix = 'TRIP';
+    const randomNum = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+    const newTripId = `${prefix}${randomNum}`;
+    setTripId(newTripId);
+  };
 
   // Fetch locations and times when component mounts
   useEffect(() => {
@@ -39,7 +55,6 @@ const AddTrip: React.FC = () => {
   }, []);
 
   const formatTime = (time: string) => {
-    // Convert 24-hour time to 12-hour format
     const [hours, minutes] = time.split(':');
     const date = new Date();
     date.setHours(parseInt(hours));
@@ -53,14 +68,51 @@ const AddTrip: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your submit logic here
-    console.log({
-      busId,
-      startLocation,
-      destination,
-      date,
-      departureTime
-    });
+    setError('');
+    setSuccess('');
+    
+    try {
+      setLoading(true);
+      
+      if (!date) {
+        throw new Error('Please select a date');
+      }
+
+      // Find the selected location and time objects
+      const selectedStartLocation = locations.find(loc => loc._id === startLocation)?.location;
+      const selectedDestination = locations.find(loc => loc._id === destination)?.location;
+      const selectedTime = times.find(time => time._id === departureTime)?.time;
+
+      if (!selectedStartLocation || !selectedDestination || !selectedTime) {
+        throw new Error('Invalid selection for location or time');
+      }
+
+      const tripData = {
+        busID: busId,
+        tripID: tripId,
+        startlocation: selectedStartLocation, // Store actual location name
+        destination: selectedDestination,     // Store actual location name
+        date: date.toISOString(),
+        departuretime: selectedTime          // Store actual time value
+      };
+
+      await TripService.createTrip(tripData);
+      await SeatBookService.initializeSeats(tripId);
+      setSuccess('Trip created successfully!');
+      
+      // Reset form
+      setBusId('');
+      generateTripId();
+      setStartLocation('');
+      setDestination('');
+      setDate(null);
+      setDepartureTime('');
+      
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create trip');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -74,14 +126,30 @@ const AddTrip: React.FC = () => {
         
         <form onSubmit={handleSubmit}>
           <div className="p-6.5">
-            {/* Error Display */}
             {error && (
               <div className="mb-4.5 text-meta-1">
                 {error}
               </div>
             )}
 
-            {/* Bus ID */}
+            {success && (
+              <div className="mb-4.5 text-meta-3">
+                {success}
+              </div>
+            )}
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Trip ID
+              </label>
+              <input
+                type="text"
+                value={tripId}
+                disabled
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white"
+              />
+            </div>
+
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
                 Bus ID <span className="text-meta-1">*</span>
@@ -96,7 +164,6 @@ const AddTrip: React.FC = () => {
               />
             </div>
 
-            {/* Start Location Select */}
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
                 Start Location <span className="text-meta-1">*</span>
@@ -117,7 +184,6 @@ const AddTrip: React.FC = () => {
               </select>
             </div>
 
-            {/* Destination Select */}
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
                 Destination <span className="text-meta-1">*</span>
@@ -142,15 +208,16 @@ const AddTrip: React.FC = () => {
               </select>
             </div>
 
-            {/* Date */}
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
                 Date <span className="text-meta-1">*</span>
               </label>
-              <DatePickerOne />
+              <DatePickerOne 
+                selectedDate={date}
+                onChange={(newDate: Date) => setDate(newDate)}
+              />
             </div>
 
-            {/* Departure Time Select */}
             <div className="mb-6">
               <label className="mb-2.5 block text-black dark:text-white">
                 Departure Time <span className="text-meta-1">*</span>
@@ -176,7 +243,7 @@ const AddTrip: React.FC = () => {
               disabled={loading}
               className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 disabled:opacity-50"
             >
-              Add Trip
+              {loading ? 'Creating...' : 'Add Trip'}
             </button>
           </div>
         </form>

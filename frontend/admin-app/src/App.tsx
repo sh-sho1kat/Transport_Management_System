@@ -20,6 +20,7 @@ import DefaultLayout from './layout/DefaultLayout';
 import AddTime from './pages/EditSchedule/AddTime';
 import AddLocation from './pages/EditSchedule/AddLocation';
 import AddTrip from './pages/EditSchedule/AddTrip';
+import ManageTrips from './pages/EditSchedule/ManageTrips';
 
 
 function App() {
@@ -107,8 +108,17 @@ function App() {
           path="/edit-schedule/add-trip"
           element={
             <>
-              <PageTitle title="Add Location | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Add Trip | TailAdmin - Tailwind CSS Admin Dashboard Template" />
               <AddTrip />
+            </>
+          }
+        />
+        <Route
+          path="/edit-schedule/manage-trips"
+          element={
+            <>
+              <PageTitle title="Manage Trips | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <ManageTrips />
             </>
           }
         />

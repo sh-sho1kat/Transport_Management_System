@@ -1,3 +1,4 @@
+// seatBookModel.js
 import mongoose from "mongoose";
 
 const busBookingSchema = new mongoose.Schema({
@@ -30,6 +31,16 @@ const busBookingSchema = new mongoose.Schema({
   },
 });
 
-const BusBooking = mongoose.model("tripID", busBookingSchema);
+// Create a model factory function instead of direct model creation
+export const createBusBookingModel = (tripId) => {
+  // Check if model already exists to prevent recreation
+  if (mongoose.models[tripId]) {
+    return mongoose.model(tripId);
+  }
+  
+  // Create new model with dynamic collection name
+  return mongoose.model(tripId, busBookingSchema);
+};
 
-export default BusBooking;
+// Default export for backwards compatibility
+export default createBusBookingModel;

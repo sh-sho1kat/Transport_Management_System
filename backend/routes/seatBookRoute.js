@@ -1,3 +1,4 @@
+// seatBookRoute.js
 import express from "express";
 import {
     createSeats,
@@ -11,19 +12,13 @@ import {
 
 const router = express.Router();
 
-// Create initial seats
-router.post("/seats/create", createSeats);
-// Get all seats
-router.get("/seats", getAllSeats);
-// Get all booked seats
-router.get("/seats/booked", getBookedSeats);
-// Get bookings by student ID
-router.get("/seats/student/:studentId", getBookingsByStudent);
-// Get specific seat
-router.get("/seats/:seatNo", getSeatByNumber);
-// Update single seat
-router.put("/seats/:seatNo", updateSeatStatus);
-// Update multiple seats
-router.put("/seats", updateMultipleSeats);
+// Updated routes with tripId parameter
+router.post("/seats/create/:tripId", createSeats);
+router.get("/seats/:tripId", getAllSeats);
+router.get("/seats/:tripId/booked", getBookedSeats);
+router.get("/seats/:tripId/student/:studentId", getBookingsByStudent);
+router.get("/seats/:tripId/:seatNo", getSeatByNumber);
+router.put("/seats/:tripId/:seatNo", updateSeatStatus);
+router.put("/seats/:tripId", updateMultipleSeats);
 
 export default router;
