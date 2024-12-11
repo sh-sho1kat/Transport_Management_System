@@ -75,6 +75,7 @@ export class SeatBookService {
   static async updateMultipleSeats(tripId: string, seats: Array<{ seatNo: string } & SeatUpdateData>) {
     try {
       const response = await axios.put(`${BASE_URL}/${tripId}`, { seats });
+      console.log(seats);
       return response.data;
     } catch (error) {
       throw new Error('Failed to update seats');
