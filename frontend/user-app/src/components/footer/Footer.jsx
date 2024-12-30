@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="grid grid-cols-5 gap-5">
         <div className="space-y-5 col-span-2">
           <Link to="/" className='text-xl text-neutral-800 dark:text-neutral-200 font-bold'>
-            <img src={Logo} alt="logo" className="w-44 h-auto object-contain" />
+            {/* <img src={Logo} alt="logo" className="w-44 h-auto object-contain" /> */}
           </Link>
           <p className="text-neutral-600 dark:text-neutral-500 text-base font-normal pr-10">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam placeat corporis, rerum laborum optio laboriosam perferendis sit culpa doloribus, tempora aliquam repellendus reprehenderit, ullam alias.

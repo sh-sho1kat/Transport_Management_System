@@ -44,7 +44,7 @@ function App() {
           index
           element={
             <>
-              <PageTitle title="Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Dashboard" />
               <ECommerce />
             </>
           }
@@ -62,7 +62,7 @@ function App() {
           path="/profile"
           element={
             <>
-              <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Profile" />
               <Profile />
             </>
           }
@@ -71,7 +71,7 @@ function App() {
           path="/forms/form-elements"
           element={
             <>
-              <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Form Elements" />
               <FormElements />
             </>
           }
@@ -80,7 +80,7 @@ function App() {
           path="/forms/form-layout"
           element={
             <>
-              <PageTitle title="Form Layout | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Form Layout" />
               <FormLayout />
             </>
           }
@@ -90,7 +90,7 @@ function App() {
           path="/edit-schedule/add-time"
           element={
             <>
-              <PageTitle title="Add Time | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Add Time" />
               <AddTime />
             </>
           }
@@ -99,7 +99,7 @@ function App() {
           path="/edit-schedule/add-location"
           element={
             <>
-              <PageTitle title="Add Location | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Add Location" />
               <AddLocation />
             </>
           }
@@ -108,7 +108,7 @@ function App() {
           path="/edit-schedule/add-trip"
           element={
             <>
-              <PageTitle title="Add Trip | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Add Trip" />
               <AddTrip />
             </>
           }
@@ -117,7 +117,7 @@ function App() {
           path="/edit-schedule/manage-trips"
           element={
             <>
-              <PageTitle title="Manage Trips | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Manage Trips" />
               <ManageTrips />
             </>
           }
@@ -126,7 +126,7 @@ function App() {
           path="/tables"
           element={
             <>
-              <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Tables" />
               <Tables />
             </>
           }
